@@ -1,24 +1,37 @@
 pub mod tasks;
 
+use clap::{Command, Parser, Arg};
 use tasks::TaskManager;
 use tasks::Task;
 
+#[derive(Parser, Debug)]
+#[command(author, version, about, long_about = None)]
+struct Args {
+    /// Add a new task 
+    #[arg(short, long)]
+    add: String,
+
+
+    /// Number of times to greet
+    #[arg(short, long)]
+    delete: String
+}
+
 fn main() {
-    println!("Todo list");
-
-    let mut task_manager = TaskManager {
-        tasks: vec![],
-    };
-
-    let task1 = Task::new(1, "Task 1".to_string(), "This is the task 1".to_string(), false);
-
-    task_manager.add(task1);
-
-    task_manager.check(0, true);
-
-    task_manager.list();  // print the all the tasks
-                        
-    task_manager.delete(0);
-
-    task_manager.list();
+    let cmd = Command::new("taskm")
+        .version("0.1")
+        .author("luv_v")
+        .about("A simple todo list CLI")
+        .subcommand(Command::new("add")
+                    .about("Add a task")
+                    .args([
+                        Arg::new("name")
+                        .short('n')
+                        .help("The name of the task."),
+                        Arg::new("description")
+                        .short('d')
+                        .help("The description of the task.")
+                    ])
+                    );
+    
 }
